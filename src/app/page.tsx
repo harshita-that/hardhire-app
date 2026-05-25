@@ -1,11 +1,11 @@
-import Link from 'next/link'
+import Link from "next/link";
 
 export default function Home() {
   return (
     <main className="min-h-screen">
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-6 py-24">
-        <div className="max-w-3xl">
+        <div className="max-w-4xl">
           <div className="mb-4 inline-flex rounded-full border px-3 py-1 text-sm">
             HardHire
           </div>
@@ -15,19 +15,27 @@ export default function Home() {
           </h1>
 
           <p className="mt-6 text-xl text-muted-foreground">
-            HardHire turns public OSHA records into a simple A–F contractor
-            safety grade so homeowners can make safer hiring decisions.
+            HardHire converts OSHA safety records into a simple A–F grade so
+            homeowners and general contractors can make safer hiring decisions.
           </p>
 
-          <div className="mt-8 flex gap-4">
-            <button className="rounded-lg bg-black px-6 py-3 text-white">
-              Join Waitlist
-            </button>
+          <div className="mt-8 flex max-w-xl gap-3">
+            <input
+              className="flex-1 rounded-lg border px-4 py-3"
+              placeholder="Search contractor name..."
+            />
 
-            <button className="rounded-lg border px-6 py-3">
-              View Sample Report
-            </button>
+            <Link
+              href="/report/abc-roofing"
+              className="rounded-lg bg-black px-6 py-3 text-white transition hover:opacity-90"
+            >
+              Check Safety Grade
+            </Link>
           </div>
+
+          <p className="mt-3 text-sm text-muted-foreground">
+            Example: ABC Roofing, SafeBuild Construction, Elite Electric
+          </p>
         </div>
       </section>
 
@@ -38,9 +46,10 @@ export default function Home() {
         </h2>
 
         <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-          A contractor can have five-star reviews and still carry a history of
-          OSHA violations. Homeowners rarely see that information before signing
-          a contract.
+          A contractor can have hundreds of positive reviews and still carry a
+          history of OSHA violations. Homeowners rarely see that information
+          before signing a contract. HardHire surfaces safety risks before the
+          work begins.
         </p>
       </section>
 
@@ -50,54 +59,82 @@ export default function Home() {
 
         <div className="grid gap-6 md:grid-cols-3">
           <div className="rounded-xl border p-6">
-            <h3 className="font-semibold">1. Search Contractor</h3>
+            <div className="mb-3 text-2xl font-bold">1</div>
+
+            <h3 className="font-semibold">Search Contractor</h3>
+
             <p className="mt-2 text-sm text-muted-foreground">
-              Enter a contractor or company name.
+              Enter a contractor or company name before accepting a bid.
             </p>
           </div>
 
           <div className="rounded-xl border p-6">
-            <h3 className="font-semibold">2. Analyze Safety History</h3>
+            <div className="mb-3 text-2xl font-bold">2</div>
+
+            <h3 className="font-semibold">Analyze OSHA History</h3>
+
             <p className="mt-2 text-sm text-muted-foreground">
-              We process OSHA citations and violation records.
+              We aggregate citations, violation severity, and historical safety
+              records.
             </p>
           </div>
 
           <div className="rounded-xl border p-6">
-            <h3 className="font-semibold">3. Receive Safety Grade</h3>
+            <div className="mb-3 text-2xl font-bold">3</div>
+
+            <h3 className="font-semibold">Receive A–F Grade</h3>
+
             <p className="mt-2 text-sm text-muted-foreground">
-              Get an easy-to-understand A–F score.
+              Get a clear safety score and understand contractor risk in
+              seconds.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Example */}
+      {/* Sample Report */}
       <section className="mx-auto max-w-6xl px-6 py-20">
-        <h2 className="mb-8 text-3xl font-bold">Example Report</h2>
+        <h2 className="mb-8 text-3xl font-bold">Sample Safety Report</h2>
 
-        <div className="max-w-md rounded-2xl border p-8">
+        <div className="max-w-md rounded-2xl border p-8 shadow-sm">
           <div className="text-sm text-muted-foreground">Contractor</div>
 
-          <div className="mt-1 text-2xl font-bold">ABC Roofing</div>
+          <div className="mt-1 text-2xl font-bold">
+            ABC Roofing Services
+          </div>
 
-          <div className="mt-6 text-6xl font-bold">C</div>
+          <div className="mt-8 text-7xl font-bold">C</div>
 
-          <div className="mt-4 space-y-2 text-sm">
-            <p>5 OSHA citations</p>
-            <p>2 serious violations</p>
-            <p>Bottom 35% of roofing contractors</p>
+          <div className="mt-8 space-y-3 text-sm">
+            <div>5 OSHA citations</div>
+            <div>2 serious violations</div>
+            <div>Bottom 35% of roofing contractors</div>
+            <div>Last citation: 8 months ago</div>
           </div>
         </div>
+      </section>
+
+      {/* Market Opportunity */}
+      <section className="mx-auto max-w-6xl px-6 py-20">
+        <h2 className="text-3xl font-bold">
+          Safety data should be available before a contract is signed.
+        </h2>
+
+        <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
+          HardHire helps homeowners avoid risky contractors and helps general
+          contractors vet subcontractors before awarding work.
+        </p>
       </section>
 
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-6 py-24">
         <div className="rounded-3xl border p-12 text-center">
-          <h2 className="text-4xl font-bold">Join the HardHire waitlist</h2>
+          <h2 className="text-4xl font-bold">
+            Join the HardHire Waitlist
+          </h2>
 
           <p className="mt-4 text-muted-foreground">
-            Be first to access contractor safety grades.
+            Be among the first users to access contractor safety intelligence.
           </p>
 
           <button className="mt-8 rounded-lg bg-black px-6 py-3 text-white">
@@ -106,5 +143,5 @@ export default function Home() {
         </div>
       </section>
     </main>
-  )
+  );
 }
