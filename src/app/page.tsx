@@ -1,4 +1,4 @@
-import Link from "next/link";
+import ContractorSearch from "@/components/ContractorSearch";
 
 export default function Home() {
   return (
@@ -19,22 +19,10 @@ export default function Home() {
             homeowners and general contractors can make safer hiring decisions.
           </p>
 
-          <div className="mt-8 flex max-w-xl gap-3">
-            <input
-              className="flex-1 rounded-lg border px-4 py-3"
-              placeholder="Search contractor name..."
-            />
-
-            <Link
-              href="/report/abc-roofing"
-              className="rounded-lg bg-black px-6 py-3 text-white transition hover:opacity-90"
-            >
-              Check Safety Grade
-            </Link>
-          </div>
+          <ContractorSearch />
 
           <p className="mt-3 text-sm text-muted-foreground">
-            Example: ABC Roofing, SafeBuild Construction, Elite Electric
+            Try: ABC Roofing, SafeBuild Electric, Elite Construction
           </p>
         </div>
       </section>
@@ -48,8 +36,7 @@ export default function Home() {
         <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
           A contractor can have hundreds of positive reviews and still carry a
           history of OSHA violations. Homeowners rarely see that information
-          before signing a contract. HardHire surfaces safety risks before the
-          work begins.
+          before signing a contract.
         </p>
       </section>
 
@@ -64,18 +51,17 @@ export default function Home() {
             <h3 className="font-semibold">Search Contractor</h3>
 
             <p className="mt-2 text-sm text-muted-foreground">
-              Enter a contractor or company name before accepting a bid.
+              Enter a contractor or company name.
             </p>
           </div>
 
           <div className="rounded-xl border p-6">
             <div className="mb-3 text-2xl font-bold">2</div>
 
-            <h3 className="font-semibold">Analyze OSHA History</h3>
+            <h3 className="font-semibold">Analyze Safety Records</h3>
 
             <p className="mt-2 text-sm text-muted-foreground">
-              We aggregate citations, violation severity, and historical safety
-              records.
+              We aggregate OSHA citations and violation history.
             </p>
           </div>
 
@@ -85,8 +71,7 @@ export default function Home() {
             <h3 className="font-semibold">Receive A–F Grade</h3>
 
             <p className="mt-2 text-sm text-muted-foreground">
-              Get a clear safety score and understand contractor risk in
-              seconds.
+              Understand contractor risk in seconds.
             </p>
           </div>
         </div>
@@ -96,7 +81,7 @@ export default function Home() {
       <section className="mx-auto max-w-6xl px-6 py-20">
         <h2 className="mb-8 text-3xl font-bold">Sample Safety Report</h2>
 
-        <div className="max-w-md rounded-2xl border p-8 shadow-sm">
+        <div className="max-w-md rounded-2xl border p-8">
           <div className="text-sm text-muted-foreground">Contractor</div>
 
           <div className="mt-1 text-2xl font-bold">
@@ -112,18 +97,6 @@ export default function Home() {
             <div>Last citation: 8 months ago</div>
           </div>
         </div>
-      </section>
-
-      {/* Market Opportunity */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <h2 className="text-3xl font-bold">
-          Safety data should be available before a contract is signed.
-        </h2>
-
-        <p className="mt-4 max-w-3xl text-lg text-muted-foreground">
-          HardHire helps homeowners avoid risky contractors and helps general
-          contractors vet subcontractors before awarding work.
-        </p>
       </section>
 
       {/* CTA */}
