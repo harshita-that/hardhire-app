@@ -6,203 +6,147 @@ import { getViolationsByContractorId } from "@/lib/hardhire/violation-queries";
 export default async function ReportPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }) {
-  const { slug } = await params;
+  const contractor = await getContractorBySlug(params.slug);
 
-  const contractor = await getContractorBySlug(slug);
+  if (!contractor) return notFound();
 
-  if (!contractor) {
-    notFound();
-  }
+  const grade = await getGradeByContractorId(contractor.id);
+  const violations = await getViolationsByContractorId(contractor.id);
 
-  const grade = await getGradeByContractorId(
-    contractor.id
+  const serious = violations.filter(
+    (v: any) => v.severity === "Serious"
   );
 
-  const violations =
-    await getViolationsByContractorId(
-      contractor.id
-    );
+  const other = violations.filter(
+    (v: any) => v.severity !== "Serious"
+  );
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">
-      {/* Header */}
+      {/* HEADER */}
       <div className="mb-10">
         <h1 className="text-5xl font-bold">
           {contractor.name}
         </h1>
 
-        <p className="mt-2 text-muted-foreground">
+        <p className="text-muted-foreground mt-2">
           Contractor Safety Intelligence Report
         </p>
       </div>
 
-      {/* Score Cards */}
-      <div className="grid gap-6 md:grid-cols-4">
-        <div className="rounded-2xl border p-6">
+      {/* SUMMARY CARDS */}
+      <div className="grid gap-4 md:grid-cols-4 mb-10">
+        <div className="rounded-2xl border p-5">
           <p className="text-sm text-muted-foreground">
             Safety Grade
           </p>
-
-          <div className="mt-4 text-7xl font-bold">
+          <p className="text-4xl font-bold">
             {grade?.grade ?? "N/A"}
-          </div>
-
-          <p className="mt-2">
-            {grade
-              ? grade.score >= 80
-                ? "Low Risk"
-                : grade.score >= 60
-                ? "Moderate Risk"
-                : "High Risk"
-              : "No Data"}
           </p>
         </div>
 
-        <div className="rounded-2xl border p-6">
-          <p className="text-sm text-muted-foreground">
-            Trade
-          </p>
-
-          <div className="mt-4 text-2xl font-bold">
-            {contractor.trade ??
-              "Unknown"}
-          </div>
-        </div>
-
-        <div className="rounded-2xl border p-6">
-          <p className="text-sm text-muted-foreground">
-            City
-          </p>
-
-          <div className="mt-4 text-2xl font-bold">
-            {contractor.city ??
-              "Unknown"}
-          </div>
-        </div>
-
-        <div className="rounded-2xl border p-6">
+        <div className="rounded-2xl border p-5">
           <p className="text-sm text-muted-foreground">
             Safety Score
           </p>
-
-          <div className="mt-4 text-4xl font-bold">
+          <p className="text-4xl font-bold">
             {grade?.score ?? 0}
-          </div>
+          </p>
+        </div>
+
+        <div className="rounded-2xl border p-5">
+          <p className="text-sm text-muted-foreground">
+            Total Violations
+          </p>
+          <p className="text-4xl font-bold">
+            {violations.length}
+          </p>
+        </div>
+
+        <div className="rounded-2xl border p-5">
+          <p className="text-sm text-muted-foreground">
+            Serious Violations
+          </p>
+          <p className="text-4xl font-bold text-red-500">
+            {serious.length}
+          </p>
         </div>
       </div>
 
-      {/* Safety Insights */}
-      <div className="mt-10 rounded-2xl border p-6">
-        <h2 className="text-2xl font-semibold">
+      {/* INSIGHTS */}
+      <div className="rounded-2xl border p-6 mb-10">
+        <h2 className="text-2xl font-semibold mb-4">
           Safety Insights
         </h2>
 
-        <ul className="mt-4 space-y-3">
+        <ul className="space-y-2 text-sm">
           <li>
-            Total Violations:{" "}
-            {violations.length}
+            • {serious.length > 0
+              ? "High-risk patterns detected in serious violations"
+              : "No serious violations detected"}
           </li>
 
           <li>
-            Serious Violations:{" "}
-            {
-              violations.filter(
-                (v) =>
-                  v.severity ===
-                  "Serious"
-              ).length
-            }
+            • {violations.length > 5
+              ? "Above-average violation count"
+              : "Violation count within expected range"}
           </li>
 
           <li>
-            Current Grade:{" "}
-            {grade?.grade ?? "N/A"}
+            • Grade classification: {grade?.grade ?? "Unknown"}
           </li>
 
-          <li>
-            ✓ Loaded from Neon Database
-          </li>
+          <li>• Data sourced from Neon DB</li>
         </ul>
       </div>
 
-      {/* Citation History */}
-      <div className="mt-10 rounded-2xl border p-6">
-        <h2 className="mb-6 text-2xl font-semibold">
-          Recent Citation History
+      {/* VIOLATIONS TABLE */}
+      <div className="rounded-2xl border p-6">
+        <h2 className="text-2xl font-semibold mb-6">
+          Recent Violations
         </h2>
 
-        <table className="w-full">
+        <table className="w-full text-left">
           <thead>
-            <tr className="border-b text-left">
-              <th className="pb-3">
-                Date
-              </th>
-              <th className="pb-3">
-                Violation
-              </th>
-              <th className="pb-3">
-                Severity
-              </th>
+            <tr className="border-b">
+              <th className="py-3">Type</th>
+              <th className="py-3">Severity</th>
+              <th className="py-3">Date</th>
             </tr>
           </thead>
 
           <tbody>
-            {violations.map(
-              (violation) => (
-                <tr
-                  key={violation.id}
-                  className="border-b"
+            {[...serious, ...other].map((v: any) => (
+              <tr key={v.id} className="border-b">
+                <td className="py-3">{v.violationType}</td>
+                <td
+                  className={`py-3 ${
+                    v.severity === "Serious"
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  }`}
                 >
-                  <td className="py-4">
-                    {violation.citationDate
-                      ? new Date(
-                          violation.citationDate
-                        ).toLocaleDateString()
-                      : "N/A"}
-                  </td>
-
-                  <td className="py-4">
-                    {
-                      violation.violationType
-                    }
-                  </td>
-
-                  <td className="py-4">
-                    {
-                      violation.severity
-                    }
-                  </td>
-                </tr>
-              )
-            )}
+                  {v.severity}
+                </td>
+                <td className="py-3">
+                  {v.citationDate
+                    ? new Date(v.citationDate).toLocaleDateString()
+                    : "N/A"}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
-      {/* Contractor Record */}
-      <div className="mt-10 rounded-2xl border p-6">
-        <h2 className="mb-4 text-2xl font-semibold">
-          Contractor Record
-        </h2>
-
-        <div className="space-y-2">
-          <p>
-            <strong>ID:</strong>{" "}
-            {contractor.id}
-          </p>
-
-          <p>
-            <strong>Slug:</strong>{" "}
-            {contractor.slug}
-          </p>
-
-          <p>
-            <strong>Created:</strong>{" "}
-            {contractor.createdAt.toLocaleString()}
-          </p>
-        </div>
+      {/* METADATA */}
+      <div className="mt-10 text-sm text-muted-foreground">
+        Contractor ID: {contractor.id} <br />
+        Slug: {contractor.slug} <br />
+        Created:{" "}
+        {new Date(contractor.createdAt).toLocaleString()}
       </div>
     </main>
   );
