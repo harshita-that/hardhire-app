@@ -1,3 +1,5 @@
+import { contractors } from "@/lib/mock-data";
+
 export default async function ReportPage({
   params,
 }: {
@@ -9,6 +11,15 @@ export default async function ReportPage({
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
+
+  const report =
+    contractors[slug as keyof typeof contractors] ?? {
+      grade: "N/A",
+      risk: "No Data Available",
+      citations: 0,
+      seriousViolations: 0,
+      percentile: 0,
+    };
 
   return (
     <main className="mx-auto max-w-6xl px-6 py-16">
@@ -24,30 +35,45 @@ export default async function ReportPage({
       {/* Score Cards */}
       <div className="grid gap-6 md:grid-cols-4">
         <div className="rounded-2xl border p-6">
-          <p className="text-sm text-muted-foreground">Safety Grade</p>
-          <div className="mt-4 text-7xl font-bold">C</div>
-          <p className="mt-2">Moderate Risk</p>
+          <p className="text-sm text-muted-foreground">
+            Safety Grade
+          </p>
+
+          <div className="mt-4 text-7xl font-bold">
+            {report.grade}
+          </div>
+
+          <p className="mt-2">{report.risk}</p>
         </div>
 
         <div className="rounded-2xl border p-6">
           <p className="text-sm text-muted-foreground">
             OSHA Citations
           </p>
-          <div className="mt-4 text-4xl font-bold">5</div>
+
+          <div className="mt-4 text-4xl font-bold">
+            {report.citations}
+          </div>
         </div>
 
         <div className="rounded-2xl border p-6">
           <p className="text-sm text-muted-foreground">
             Serious Violations
           </p>
-          <div className="mt-4 text-4xl font-bold">2</div>
+
+          <div className="mt-4 text-4xl font-bold">
+            {report.seriousViolations}
+          </div>
         </div>
 
         <div className="rounded-2xl border p-6">
           <p className="text-sm text-muted-foreground">
             Industry Percentile
           </p>
-          <div className="mt-4 text-4xl font-bold">35%</div>
+
+          <div className="mt-4 text-4xl font-bold">
+            {report.percentile}%
+          </div>
         </div>
       </div>
 
