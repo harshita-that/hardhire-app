@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/themes/provider";
 import "./globals.css";
 import { inter } from "./fonts";
+import { AppShell } from "@/components/layout/app-shell";
+import { ds } from "@/lib/design-system";
 
 export const metadata: Metadata = {
   title: "HardHire",
@@ -14,27 +16,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={inter.variable}
-      suppressHydrationWarning
-    >
-      <body
-        className="
-          bg-white text-zinc-900
-          antialiased
-          min-h-screen
-        "
-      >
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <body className={ds.layout.body}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
         >
-          <div className="min-h-screen flex flex-col">
-            {children}
-          </div>
+          <AppShell>{children}</AppShell>
         </ThemeProvider>
       </body>
     </html>

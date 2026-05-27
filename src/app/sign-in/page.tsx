@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { PageContainer } from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "@/lib/auth/client";
+import { ds } from "@/lib/design-system";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -39,20 +41,16 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="mx-auto flex w-full max-w-md flex-1 flex-col px-5 md:max-w-lg md:px-0 lg:max-w-xl">
-        <main className="flex flex-1 flex-col justify-center">
-          <div className="mx-auto w-full max-w-sm">
-            <h1 className="text-3xl font-semibold leading-none tracking-tighter md:text-4xl">
-              Sign In
-            </h1>
-            <p className="mt-3.5 text-base leading-snug tracking-tight text-[#61646B] md:text-lg dark:text-[#94979E]">
+    <PageContainer className="flex min-h-[60vh] flex-col justify-center">
+      <div className="mx-auto w-full max-w-sm">
+            <h1 className={ds.text.pageTitle}>Sign In</h1>
+            <p className={ds.text.pageDescription}>
               Enter your email and password to sign in to your account.
             </p>
 
             <form onSubmit={handleSubmit} className="mt-8 space-y-6">
               {error && (
-                <div className="rounded-md border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-500 dark:text-red-500">
+                <div className="rounded-xl border border-[#EF4444]/20 bg-[#EF4444]/10 px-4 py-3 text-sm text-[#EF4444]">
                   {error}
                 </div>
               )}
@@ -95,18 +93,16 @@ export default function SignInPage() {
               </Button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-[#61646B] dark:text-[#94979E]">
+            <p className="mt-6 text-center text-sm text-white/40">
               Don't have an account?{" "}
               <Link
                 href="/sign-up"
-                className="font-medium text-primary hover:underline"
+                className="font-medium text-[#6E56CF] hover:text-[#7C65D9]"
               >
                 Sign up
               </Link>
             </p>
-          </div>
-        </main>
       </div>
-    </div>
+    </PageContainer>
   );
 }

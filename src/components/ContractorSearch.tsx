@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function ContractorSearch() {
   const [contractor, setContractor] = useState("");
@@ -20,19 +22,19 @@ export default function ContractorSearch() {
 
   return (
     <div className="mt-8 flex max-w-xl gap-3">
-      <input
+      <Input
         value={contractor}
         onChange={(e) => setContractor(e.target.value)}
         placeholder="Search contractor name..."
-        className="flex-1 rounded-lg border px-4 py-3"
+        className="flex-1"
       />
 
-      <button
+      <Button
         onClick={handleSearch}
-        className="rounded-lg bg-black px-6 py-3 text-white"
+        variant="default"
       >
         Check Safety Grade
-      </button>
+      </Button>
     </div>
   );
 }

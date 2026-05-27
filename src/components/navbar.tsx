@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ThemeSelector } from "@/components/themes/selector";
 import { Button } from "@/components/ui/button";
 import { useSession, signOut } from "@/lib/auth/client";
+import { ds } from "@/lib/design-system";
 
 export function NavBar() {
   const { data: session, isPending } = useSession();
@@ -14,19 +15,11 @@ export function NavBar() {
   };
 
   return (
-    <nav className="flex items-center justify-between py-6 md:py-8">
+    <nav className={ds.layout.navbar}>
       <Link href="/">
         <div className="flex items-center">
           <Image
-            className="lg:h-7 lg:w-auto dark:hidden"
-            src="/logo.svg"
-            alt="Neon logo"
-            width={88}
-            height={24}
-            priority
-          />
-          <Image
-            className="hidden lg:h-7 lg:w-auto dark:block"
+            className="lg:h-7 lg:w-auto"
             src="/logo-dark.svg"
             alt="Neon logo"
             width={88}
@@ -38,11 +31,11 @@ export function NavBar() {
       <div className="flex items-center gap-4">
         <ThemeSelector />
         {isPending ? (
-          <Button variant="outline" disabled>
+          <Button variant="secondary" disabled>
             Loading...
           </Button>
         ) : session?.user ? (
-          <Button variant="outline" onClick={handleSignOut}>
+          <Button variant="secondary" onClick={handleSignOut}>
             Sign Out
           </Button>
         ) : (

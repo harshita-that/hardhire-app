@@ -3,6 +3,31 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
+import { PageContainer } from "@/components/layout/page-container";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { PageHeader } from "@/components/ui/page-header";
+import { Section } from "@/components/ui/section";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { EmptyState } from "@/components/ui/empty-state";
+
+function gradeVariant(
+  grade?: string
+): "success" | "accent" | "warning" | "error" {
+  if (grade === "A") return "success";
+  if (grade === "B") return "accent";
+  if (grade === "C") return "warning";
+  return "error";
+}
+
 export default function HomeClient({ contractors = [] }: any) {
   const [query, setQuery] = useState("");
 
@@ -12,9 +37,7 @@ export default function HomeClient({ contractors = [] }: any) {
     const q = query.toLowerCase();
 
     return safe.filter((c: any) =>
-      [c.name, c.trade, c.city].some((v) =>
-        v?.toLowerCase().includes(q)
-      )
+      [c.name, c.trade, c.city].some((v) => v?.toLowerCase().includes(q))
     );
   }, [safe, query]);
 
@@ -27,106 +50,81 @@ export default function HomeClient({ contractors = [] }: any) {
       : 0;
 
   return (
-    <main className="max-w-6xl mx-auto px-6 py-14">
+    <PageContainer>
+      <PageHeader
+        title="HardHire"
+        description="Contractor Safety Intelligence"
+      />
 
-      {/* HEADER */}
-      <div className="mb-10">
-        <h1 className="text-4xl font-semibold tracking-tight">
-          HardHire
-        </h1>
-
-        <p className="text-sm text-zinc-500 mt-1">
-          Contractor Safety Intelligence
-        </p>
-      </div>
-
-      {/* TOP METRICS (minimal strip) */}
-      <div className="flex gap-10 text-sm text-zinc-600 mb-8">
-        <div>
-          <span className="text-zinc-900 font-medium">
-            {safe.length}
-          </span>{" "}
-          contractors
-        </div>
-
-        <div>
-          avg score{" "}
-          <span className="text-zinc-900 font-medium">
-            {avgScore}
-          </span>
-        </div>
-      </div>
-
-      {/* SEARCH */}
-      <div className="mb-6">
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search contractors..."
-          className="w-full border border-zinc-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/10"
+      <div className="grid gap-4 sm:grid-cols-2">
+        <KpiCard
+          label="Contractors"
+          value={safe.length}
+          sublabel="In directory"
+        />
+        <KpiCard
+          label="Avg Score"
+          value={avgScore}
+          tone={avgScore >= 70 ? "success" : "default"}
         />
       </div>
 
-      {/* TABLE (YC STYLE CORE UI) */}
-      <div className="border border-zinc-200 rounded-2xl overflow-hidden">
-
-        {/* HEADER ROW */}
-        <div className="grid grid-cols-12 text-xs uppercase tracking-wide text-zinc-500 bg-zinc-50 px-5 py-3">
-          <div className="col-span-5">Contractor</div>
-          <div className="col-span-2">Trade</div>
-          <div className="col-span-2">City</div>
-          <div className="col-span-1 text-center">Grade</div>
-          <div className="col-span-2 text-right">Score</div>
+      <Section title="Directory">
+        <div className="mb-4">
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search contractors..."
+          />
         </div>
 
-        {/* ROWS */}
-        <div className="divide-y divide-zinc-100">
-          {filtered.map((c: any) => (
-            <Link
-              key={c.id}
-              href={`/report/${c.slug}`}
-              className="grid grid-cols-12 px-5 py-4 hover:bg-zinc-50 transition"
-            >
-              <div className="col-span-5 font-medium">
-                {c.name}
-              </div>
-
-              <div className="col-span-2 text-sm text-zinc-600">
-                {c.trade}
-              </div>
-
-              <div className="col-span-2 text-sm text-zinc-600">
-                {c.city}
-              </div>
-
-              <div className="col-span-1 text-center">
-                <span
-                  className={`
-                    text-xs px-2 py-1 rounded-md font-medium
-                    ${
-                      c.grade === "A"
-                        ? "bg-green-100 text-green-700"
-                        : c.grade === "B"
-                        ? "bg-lime-100 text-lime-700"
-                        : c.grade === "C"
-                        ? "bg-yellow-100 text-yellow-700"
-                        : c.grade === "D"
-                        ? "bg-orange-100 text-orange-700"
-                        : "bg-red-100 text-red-700"
-                    }
-                  `}
-                >
-                  {c.grade ?? "—"}
-                </span>
-              </div>
-
-              <div className="col-span-2 text-right text-sm text-zinc-900 font-medium">
-                {c.score ?? 0}
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    </main>
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="w-[40%]">Contractor</TableHead>
+              <TableHead>Trade</TableHead>
+              <TableHead>City</TableHead>
+              <TableHead className="text-center">Grade</TableHead>
+              <TableHead className="text-right">Score</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filtered.length === 0 ? (
+              <TableRow className="hover:bg-transparent">
+                <TableCell colSpan={5}>
+                  <EmptyState
+                    title="No contractors found"
+                    description="Try adjusting your search terms."
+                  />
+                </TableCell>
+              </TableRow>
+            ) : (
+              filtered.map((c: any) => (
+                <TableRow key={c.id} className="group">
+                  <TableCell>
+                    <Link
+                      href={`/report/${c.slug}`}
+                      className="font-medium text-white/90 transition-colors duration-200 ease-out group-hover:text-white"
+                    >
+                      {c.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="text-white/55">{c.trade}</TableCell>
+                  <TableCell className="text-white/55">{c.city}</TableCell>
+                  <TableCell className="text-center">
+                    <Badge variant={gradeVariant(c.grade)}>
+                      {c.grade ?? "—"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-right font-medium text-white/80">
+                    {c.score ?? 0}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </Section>
+    </PageContainer>
   );
 }

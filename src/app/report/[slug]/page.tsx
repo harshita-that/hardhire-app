@@ -3,13 +3,24 @@ import { getContractorBySlug } from "@/lib/hardhire/queries";
 import { getGradeByContractorId } from "@/lib/hardhire/grade-queries";
 import { getViolationsByContractorId } from "@/lib/hardhire/violation-queries";
 
+import { PageContainer } from "@/components/layout/page-container";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { EmptyState } from "@/components/ui/empty-state";
+import { KpiCard } from "@/components/ui/kpi-card";
+import { PageHeader } from "@/components/ui/page-header";
+import { RiskBadge } from "@/components/ui/risk-badge";
+import { Section } from "@/components/ui/section";
+import { ds } from "@/lib/design-system";
+
 export default async function ReportPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const contractor = await getContractorBySlug(params.slug);
+  const { slug } = await params;
 
+  const contractor = await getContractorBySlug(slug);
   if (!contractor) return notFound();
 
   const grade = await getGradeByContractorId(contractor.id);
@@ -23,131 +34,92 @@ export default async function ReportPage({
     (v: any) => v.severity !== "Serious"
   );
 
+  const allViolations = [...serious, ...other];
+
   return (
-    <main className="mx-auto max-w-6xl px-6 py-16">
-      {/* HEADER */}
-      <div className="mb-10">
-        <h1 className="text-5xl font-bold">
-          {contractor.name}
-        </h1>
+    <PageContainer>
+      <PageHeader
+        title={contractor.name}
+        description="Safety Intelligence Report"
+        action={<RiskBadge grade={grade?.grade} />}
+      />
 
-        <p className="text-muted-foreground mt-2">
-          Contractor Safety Intelligence Report
-        </p>
+      <div className={ds.spacing.gridKpi}>
+        <KpiCard label="Score" value={grade?.score ?? 0} />
+        <KpiCard label="Grade" value={grade?.grade ?? "N/A"} />
+        <KpiCard label="Violations" value={violations.length} />
+        <KpiCard
+          label="Serious"
+          value={serious.length}
+          tone="danger"
+          trend={serious.length > 0 ? "up" : "neutral"}
+        />
       </div>
 
-      {/* SUMMARY CARDS */}
-      <div className="grid gap-4 md:grid-cols-4 mb-10">
-        <div className="rounded-2xl border p-5">
-          <p className="text-sm text-muted-foreground">
-            Safety Grade
-          </p>
-          <p className="text-4xl font-bold">
-            {grade?.grade ?? "N/A"}
-          </p>
-        </div>
+      <Section title="Risk Analysis">
+        <Card>
+          <CardContent className="space-y-3 text-sm text-white/60">
+            <p>
+              {serious.length > 0
+                ? "Elevated risk detected due to serious violations."
+                : "No critical risk detected."}
+            </p>
+            <p>
+              {violations.length > 5
+                ? "Above baseline violation activity."
+                : "Normal activity levels."}
+            </p>
+            <p>
+              Classification:{" "}
+              <span className="font-medium text-white/85">
+                {grade?.grade ?? "Unknown"}
+              </span>
+            </p>
+          </CardContent>
+        </Card>
+      </Section>
 
-        <div className="rounded-2xl border p-5">
-          <p className="text-sm text-muted-foreground">
-            Safety Score
-          </p>
-          <p className="text-4xl font-bold">
-            {grade?.score ?? 0}
-          </p>
-        </div>
-
-        <div className="rounded-2xl border p-5">
-          <p className="text-sm text-muted-foreground">
-            Total Violations
-          </p>
-          <p className="text-4xl font-bold">
-            {violations.length}
-          </p>
-        </div>
-
-        <div className="rounded-2xl border p-5">
-          <p className="text-sm text-muted-foreground">
-            Serious Violations
-          </p>
-          <p className="text-4xl font-bold text-red-500">
-            {serious.length}
-          </p>
-        </div>
-      </div>
-
-      {/* INSIGHTS */}
-      <div className="rounded-2xl border p-6 mb-10">
-        <h2 className="text-2xl font-semibold mb-4">
-          Safety Insights
-        </h2>
-
-        <ul className="space-y-2 text-sm">
-          <li>
-            • {serious.length > 0
-              ? "High-risk patterns detected in serious violations"
-              : "No serious violations detected"}
-          </li>
-
-          <li>
-            • {violations.length > 5
-              ? "Above-average violation count"
-              : "Violation count within expected range"}
-          </li>
-
-          <li>
-            • Grade classification: {grade?.grade ?? "Unknown"}
-          </li>
-
-          <li>• Data sourced from Neon DB</li>
-        </ul>
-      </div>
-
-      {/* VIOLATIONS TABLE */}
-      <div className="rounded-2xl border p-6">
-        <h2 className="text-2xl font-semibold mb-6">
-          Recent Violations
-        </h2>
-
-        <table className="w-full text-left">
-          <thead>
-            <tr className="border-b">
-              <th className="py-3">Type</th>
-              <th className="py-3">Severity</th>
-              <th className="py-3">Date</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {[...serious, ...other].map((v: any) => (
-              <tr key={v.id} className="border-b">
-                <td className="py-3">{v.violationType}</td>
-                <td
-                  className={`py-3 ${
-                    v.severity === "Serious"
-                      ? "text-red-500"
-                      : "text-gray-500"
-                  }`}
+      <Section title="Violations Timeline">
+        <Card>
+          {allViolations.length === 0 ? (
+            <EmptyState
+              title="No violations recorded"
+              description="This contractor has no violations on file."
+            />
+          ) : (
+            <div className="divide-y divide-white/[0.06]">
+              {allViolations.map((v: any) => (
+                <div
+                  key={v.id}
+                  className="flex items-center justify-between py-4 first:pt-0 last:pb-0"
                 >
-                  {v.severity}
-                </td>
-                <td className="py-3">
-                  {v.citationDate
-                    ? new Date(v.citationDate).toLocaleDateString()
-                    : "N/A"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                  <div>
+                    <p className="text-sm font-medium text-white/85">
+                      {v.violationType}
+                    </p>
+                    <p className="mt-0.5 text-xs text-white/40">
+                      {v.citationDate
+                        ? new Date(v.citationDate).toLocaleDateString()
+                        : "N/A"}
+                    </p>
+                  </div>
+                  <Badge
+                    variant={
+                      v.severity === "Serious" ? "error" : "neutral"
+                    }
+                  >
+                    {v.severity}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      </Section>
 
-      {/* METADATA */}
-      <div className="mt-10 text-sm text-muted-foreground">
-        Contractor ID: {contractor.id} <br />
-        Slug: {contractor.slug} <br />
-        Created:{" "}
-        {new Date(contractor.createdAt).toLocaleString()}
-      </div>
-    </main>
+      <p className="font-mono text-xs text-white/25">
+        ID: {contractor.id} · Slug: {contractor.slug}
+      </p>
+    </PageContainer>
   );
 }
