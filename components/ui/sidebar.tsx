@@ -12,7 +12,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   const nav = [
-    { name: "Dashboard", href: "/" },
+    { name: "Dashboard", href: "/dashboard" },
     { name: "Contractors", href: "/contractors" },
     { name: "Reports", href: "/reports" },
     { name: "Settings", href: "/settings" },

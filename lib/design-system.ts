@@ -17,8 +17,8 @@ export const colors = {
   textPrimary: "#FFFFFF",
   textSecondary: "rgba(255,255,255,0.60)",
   textMuted: "rgba(255,255,255,0.40)",
-  accent: "#6E56CF",
-  accentHover: "#7C65D9",
+  accent: "#3B82F6",
+  accentHover: "#60A5FA",
   success: "#22C55E",
   warning: "#F59E0B",
   danger: "#EF4444",
@@ -98,8 +98,8 @@ export const ds = {
   },
 
   button: {
-    base: "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all duration-200 ease-out outline-none disabled:pointer-events-none disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[#6E56CF]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0F17]",
-    primary: "bg-[#6E56CF] text-white hover:bg-[#7C65D9]",
+    base: "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all duration-200 ease-out outline-none disabled:pointer-events-none disabled:opacity-50 hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[#3B82F6]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0B0F17]",
+    primary: "bg-[#3B82F6] text-white hover:bg-[#60A5FA]",
     secondary:
       "border border-white/[0.10] bg-transparent text-white/80 hover:bg-white/[0.04]",
     ghost:
@@ -116,7 +116,7 @@ export const ds = {
   },
 
   input: {
-    base: "flex h-9 w-full border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white transition-all duration-200 ease-out placeholder:text-white/25 focus-visible:outline-none focus-visible:border-white/20 focus-visible:ring-2 focus-visible:ring-[#6E56CF]/25 disabled:cursor-not-allowed disabled:opacity-50",
+    base: "flex h-9 w-full border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-sm text-white transition-all duration-200 ease-out placeholder:text-white/25 focus-visible:outline-none focus-visible:border-white/20 focus-visible:ring-2 focus-visible:ring-[#3B82F6]/25 disabled:cursor-not-allowed disabled:opacity-50",
     radius: radius.lg,
   },
 

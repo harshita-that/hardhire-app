@@ -18,7 +18,7 @@ const buttonVariants = cva(
         danger: ds.button.danger,
         destructive: ds.button.danger,
         link: cn(
-          "text-[#6E56CF] underline-offset-4 hover:underline hover:scale-100 active:scale-100"
+          "text-[#3B82F6] underline-offset-4 hover:underline hover:scale-100 active:scale-100"
         ),
       },
       size: {

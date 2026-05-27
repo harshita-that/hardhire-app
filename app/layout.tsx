@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/themes/provider";
 import "./globals.css";
 import { inter } from "./fonts";
-import { AppShell } from "@/components/layout/app-shell";
 import { ds } from "@/lib/design-system";
 
 export const metadata: Metadata = {
-  title: "HardHire",
-  description: "Contractor Safety Intelligence Platform",
+  title: "HardHire — Contractor Safety Intelligence",
+  description:
+    "Know a contractor's safety history before you hire. HardHire analyzes OSHA violations and generates contractor safety grades from A to F.",
 };
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <AppShell>{children}</AppShell>
+          {children}
         </ThemeProvider>
       </body>
     </html>

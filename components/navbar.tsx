@@ -5,18 +5,21 @@ import Link from "next/link";
 import { ThemeSelector } from "@/components/themes/selector";
 import { Button } from "@/components/ui/button";
 import { useSession, signOut } from "@/lib/auth/client";
+import { useRouter } from "next/navigation";
 import { ds } from "@/lib/design-system";
 
 export function NavBar() {
   const { data: session, isPending } = useSession();
+  const router = useRouter();
 
   const handleSignOut = async () => {
     await signOut();
+    router.push("/");
   };
 
   return (
     <nav className={ds.layout.navbar}>
-      <Link href="/">
+      <Link href="/dashboard">
         <div className="flex items-center">
           <Image
             className="lg:h-7 lg:w-auto"

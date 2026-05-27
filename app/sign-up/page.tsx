@@ -28,12 +28,13 @@ export default function SignUpPage() {
         email,
         password,
         name,
+        callbackURL: "/dashboard",
       });
 
       if (result.error) {
         setError(result.error.message || "Failed to sign up");
       } else {
-        router.push("/");
+        router.push("/dashboard");
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unexpected error occurred");
@@ -111,7 +112,7 @@ export default function SignUpPage() {
           Already have an account?{" "}
           <Link
             href="/sign-in"
-            className="font-medium text-[#6E56CF] hover:text-[#7C65D9]"
+            className="font-medium text-[#3B82F6] hover:text-[#60A5FA]"
           >
             Sign in
           </Link>

@@ -16,7 +16,7 @@ const badgeVariants = cva(ds.badge.base, {
       neutral:
         "bg-white/[0.06] text-white/55 border-white/[0.08]",
       accent:
-        "bg-[#6E56CF]/10 text-[#A78BFA] border-[#6E56CF]/20",
+        "bg-[#3B82F6]/10 text-[#93C5FD] border-[#3B82F6]/20",
     },
   },
   defaultVariants: {
