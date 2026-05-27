@@ -32,12 +32,17 @@ export default function SignUpPage() {
       });
 
       if (result.error) {
-        setError(result.error.message || "Failed to sign up");
+        console.error("[HardHire] Sign-up error:", result.error);
+        const message = result.error.message 
+          || result.error.statusText 
+          || "Failed to sign up. Please try again.";
+        setError(message);
       } else {
         router.push("/dashboard");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred");
+      console.error("[HardHire] Sign-up exception:", err);
+      setError(err instanceof Error ? err.message : "An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }

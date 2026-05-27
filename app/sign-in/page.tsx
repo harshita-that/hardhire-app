@@ -30,12 +30,17 @@ export default function SignInPage() {
       });
 
       if (result.error) {
-        setError(result.error.message || "Failed to sign in");
+        console.error("[HardHire] Sign-in error:", result.error);
+        const message = result.error.message 
+          || result.error.statusText 
+          || "Failed to sign in. Please try again.";
+        setError(message);
       } else {
         router.push("/dashboard");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unexpected error occurred");
+      console.error("[HardHire] Sign-in exception:", err);
+      setError(err instanceof Error ? err.message : "An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
