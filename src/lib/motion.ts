@@ -1,9 +1,16 @@
 import { motionTokens } from "@/lib/design-system";
 
-/** Framer Motion constants — keep in sync with design-system motionTokens */
+/**
+ * Single source of truth for all animations
+ * No duplicates, no aliases, no motionPresets
+ */
+
 export const motion = {
   page: {
-    initial: { opacity: 0, y: motionTokens.pageOffsetY },
+    initial: {
+      opacity: 0,
+      y: motionTokens.pageOffsetY,
+    },
     animate: {
       opacity: 1,
       y: 0,
@@ -13,18 +20,21 @@ export const motion = {
       },
     },
   },
+
   cardHover: {
-    y: motionTokens.cardLiftY,
+    y: -2,
     transition: {
-      duration: motionTokens.durationMs.normal / 1000,
-      ease: "easeOut",
+      duration: 0.2,
+      ease: [0.25, 0.1, 0.25, 1] as const,
     },
   },
+
   sidebarSpring: {
     type: "spring" as const,
     stiffness: 380,
     damping: 30,
   },
+
   staggerContainer: {
     initial: {},
     animate: {
@@ -33,6 +43,7 @@ export const motion = {
       },
     },
   },
+
   staggerItem: {
     initial: { opacity: 0, y: 6 },
     animate: {

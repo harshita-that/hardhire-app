@@ -2,11 +2,13 @@
 
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion } from "framer-motion";
+import { motion as framerMotion } from "framer-motion";
 
 import { ds } from "@/lib/design-system";
-import { motion as motionPresets } from "@/lib/motion";
+import { motion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
+
+/* ------------------ Variants ------------------ */
 
 const cardVariants = cva("", {
   variants: {
@@ -25,18 +27,20 @@ export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cardVariants> {}
 
+/* ------------------ Card Component ------------------ */
+
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant = "default", children, ...props }, ref) => {
     if (variant === "interactive") {
       return (
-        <motion.div
+        <framerMotion.div
           ref={ref}
           className={cn(cardVariants({ variant }), className)}
-          whileHover={motionPresets.cardHover}
-          {...(props as React.ComponentProps<typeof motion.div>)}
+          whileHover={motion.cardHover}
+          {...(props as React.ComponentProps<typeof framerMotion.div>)}
         >
           {children}
-        </motion.div>
+        </framerMotion.div>
       );
     }
 
@@ -51,7 +55,10 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     );
   }
 );
+
 Card.displayName = "Card";
+
+/* ------------------ Subcomponents ------------------ */
 
 const CardHeader = React.forwardRef<
   HTMLDivElement,
@@ -66,7 +73,7 @@ const CardHeader = React.forwardRef<
 CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<
-  HTMLParagraphElement,
+  HTMLHeadingElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
   <h3
@@ -97,5 +104,15 @@ const CardContent = React.forwardRef<
 ));
 CardContent.displayName = "CardContent";
 
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, cardVariants };
+/* ------------------ Exports ------------------ */
+
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  cardVariants,
+};
+
 export type { CardVariant } from "@/lib/design-system";
